@@ -674,6 +674,7 @@ html, body { margin: 0; padding: 0; }
   display: flex;
   flex-direction: column;
 }
+.wizard[hidden] { display: none; }
 .wizard > .container-read { flex: 1; }
 .wizard-footnote {
   text-align: center;
