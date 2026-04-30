@@ -687,6 +687,23 @@ html, body { margin: 0; padding: 0; }
   letter-spacing: 0.02em;
 }
 
+/* Full-width primary button (used on tenant flow) */
+.btn--block {
+  width: 100%;
+  justify-content: center;
+  padding: 18px 24px;
+  font-size: 17px;
+}
+
+/* Tenant flow — small "back to question 1" link below submit */
+.quote-tenant-back {
+  margin-top: 24px;
+  text-align: center;
+}
+.quote-tenant-back .btn-back {
+  font-size: 14px;
+}
+
 /* Step heading style for wizard (h2 inside step) */
 .wizard .quote-step h2 {
   font-size: 36px;

@@ -90,11 +90,6 @@
         </label>
       </div>
 
-      <div class="rent-notice" id="rentNotice" hidden>
-        <strong>Heat pump installs need the property owner's approval.</strong>
-        <span>If your landlord is open to it, we'd be happy to talk them through it directly. Drop us a line at <a href="mailto:hello@coastlineheatpumps.co.uk">hello@coastlineheatpumps.co.uk</a> or pass on our number: 01872 000 000.</span>
-      </div>
-
       <div class="quote-nav">
         <button type="button" class="btn-back" data-action="back-to-intro">← Back</button>
         <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
@@ -116,6 +111,40 @@
       <div class="quote-nav">
         <button type="button" class="btn-back" data-action="back">← Back</button>
         <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
+    <div class="quote-step quote-step--tenant" data-step="tenant">
+      <span class="eyebrow">A quick note</span>
+      <h2>Heat pumps need the property owner's approval — but you can still help make it happen.</h2>
+      <p class="quote-helper">The Boiler Upgrade Scheme requires the property owner to apply. We've put together a one-page PDF written from the landlord's perspective — explaining the financial case, the grant, and the rising EPC requirements for rental properties. If you forward it to your landlord, we'll handle the rest.</p>
+
+      <div class="quote-input">
+        <label for="tenantEmail">Email</label>
+        <input type="email" id="tenantEmail" name="tenantEmail" autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="quote-input">
+        <label for="tenantName">Your name <span class="optional">(optional)</span></label>
+        <input type="text" id="tenantName" name="tenantName" autocomplete="name" placeholder="Full name">
+      </div>
+
+      <button type="button" class="btn btn-primary btn--block" data-action="tenant-submit" disabled>Email me the PDF <span class="arrow">→</span></button>
+      <div class="quote-tenant-back">
+        <button type="button" class="btn-back" data-action="back-to-1">← Back to question 1</button>
+      </div>
+    </div>
+
+    <!-- TENANT THANKS: success state after PDF request -->
+    <div class="quote-step quote-step--tenant" data-step="tenant-thanks">
+      <span class="eyebrow">Sent</span>
+      <h2>The PDF is on its way.</h2>
+      <p class="quote-helper">Check your inbox in a few minutes. We've included a short message you can paste into an email to your landlord. If they get in touch, we'll take it from there — and you'll be the reason their property got a heat pump.</p>
+      <p class="quote-helper">Didn't arrive? Check your spam folder, or email us directly at <a href="mailto:hello@coastlineheatpumps.co.uk">hello@coastlineheatpumps.co.uk</a>.</p>
+
+      <div class="quote-nav">
+        <span></span>
+        <a href="index.html" class="btn btn-secondary">Back to homepage</a>
       </div>
     </div>
 
@@ -174,7 +203,10 @@
 <script>
 (function () {
   const TOTAL = 12;
-  const state = { step: 1, answers: { ownership: '', postcode: '' } };
+  const state = {
+    step: 1,
+    answers: { ownership: '', postcode: '', tenantEmail: '', tenantName: '' }
+  };
 
   const $  = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
@@ -183,10 +215,14 @@
     /^[A-Z]{1,2}\d{1,2}[A-Z]?\s?\d[A-Z]{2}$/i
       .test((p || '').replace(/\s+/g, ' ').trim());
 
+  const isEmail = e => /^\S+@\S+\.\S+$/.test((e || '').trim());
+
   // Step validators — add new entries as we add questions.
+  // Step 1: any of the three ownership answers is valid (rent routes to the tenant flow).
   const validators = {
-    1: a => a.ownership === 'own' || a.ownership === 'landlord',
-    2: a => isUkPostcode(a.postcode)
+    1:        a => ['own', 'landlord', 'rent'].includes(a.ownership),
+    2:        a => isUkPostcode(a.postcode),
+    tenant:   a => isEmail(a.tenantEmail)
   };
 
   function isStepValid(n) {
@@ -217,7 +253,15 @@
     $$('.quote-step').forEach(el => el.classList.remove('active'));
     const target = $(`.quote-step[data-step="${n}"]`);
     if (target) target.classList.add('active');
-    $('#qpStepNum').textContent = n;
+
+    // Step counter only shown for numeric main-flow steps.
+    if (typeof n === 'number') {
+      $('#qpStepNum').textContent = n;
+      $('#stepCounter').hidden = false;
+    } else {
+      $('#stepCounter').hidden = true;
+    }
+
     refreshContinue();
 
     // Auto-focus first text input on the new step
@@ -237,12 +281,6 @@
     const t = e.target;
     if (t.matches('input[type="radio"]')) {
       state.answers[t.name] = t.value;
-
-      // Step 1 specific: show the rent notice when "rent" is picked.
-      if (t.name === 'ownership') {
-        $('#rentNotice').hidden = (t.value !== 'rent');
-      }
-
       refreshContinue();
     }
   });
@@ -280,14 +318,28 @@
   document.addEventListener('click', e => {
     const action = e.target.closest('[data-action]')?.dataset.action;
     if (!action) return;
+
     if (action === 'start') {
       showWizard();
     } else if (action === 'back-to-intro') {
       showIntro();
-    } else if (action === 'next' && isStepValid(state.step) && state.step < TOTAL) {
-      setStep(state.step + 1);
-    } else if (action === 'back' && state.step > 1) {
+    } else if (action === 'back-to-1') {
+      setStep(1);
+    } else if (action === 'next' && isStepValid(state.step)) {
+      // Step 1 with "rent" answer routes to the tenant side flow.
+      if (state.step === 1 && state.answers.ownership === 'rent') {
+        setStep('tenant');
+      } else if (typeof state.step === 'number' && state.step < TOTAL) {
+        setStep(state.step + 1);
+      }
+    } else if (action === 'back' && typeof state.step === 'number' && state.step > 1) {
       setStep(state.step - 1);
+    } else if (action === 'tenant-submit' && isStepValid('tenant')) {
+      console.log('[Coastline tenant flow]', {
+        email: state.answers.tenantEmail,
+        name: state.answers.tenantName
+      });
+      setStep('tenant-thanks');
     }
   });
 })();
