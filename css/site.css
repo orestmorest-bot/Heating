@@ -1,5 +1,8 @@
 @import url("./tokens.css");
 
+/* Safety net: ensure `hidden` attribute always wins over author display rules */
+[hidden] { display: none !important; }
+
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 
