@@ -15,14 +15,15 @@
     <a href="index.html" class="nav-logo" aria-label="Coastline Heat Pumps home">
       <img src="assets/coastline-logo.png" alt="Coastline Heat Pumps">
     </a>
-    <nav class="nav-links" aria-label="Primary">
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
       <a href="index.html#about">About</a>
       <a href="index.html#installs">Recent installs</a>
       <a href="index.html#contact">Contact</a>
     </nav>
-    <div class="nav-cta">
+    <div class="nav-cta" id="navCta">
       <a href="tel:01872000000" class="btn btn-secondary">01872 000 000</a>
     </div>
+    <div class="step-counter" id="stepCounter" hidden aria-live="polite">STEP <span id="qpStepNum">1</span> OF <span id="qpTotal">12</span></div>
   </div>
 </header>
 
@@ -62,6 +63,46 @@
 
     <p class="quote-intro-footnote">Your details are private. We don't share or sell them.</p>
   </div>
+</section>
+
+<!-- WIZARD -->
+<section class="wizard" id="quoteWizard" hidden>
+  <div class="container-read">
+
+    <!-- STEP 1: Ownership -->
+    <div class="quote-step active" data-step="1">
+      <span class="eyebrow">About you</span>
+      <h2>Are you the property owner?</h2>
+      <p class="quote-helper">The Boiler Upgrade Scheme requires the property owner to apply.</p>
+
+      <div class="quote-options" role="radiogroup">
+        <label class="quote-option">
+          <input type="radio" name="ownership" value="own">
+          <span class="opt-text"><span class="label">Yes, I own and live there</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="ownership" value="landlord">
+          <span class="opt-text"><span class="label">Yes, I'm a landlord of a let property</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="ownership" value="rent">
+          <span class="opt-text"><span class="label">No, I rent the property</span></span>
+        </label>
+      </div>
+
+      <div class="rent-notice" id="rentNotice" hidden>
+        <strong>Heat pump installs need the property owner's approval.</strong>
+        <span>If your landlord is open to it, we'd be happy to talk them through it directly. Drop us a line at <a href="mailto:hello@coastlineheatpumps.co.uk">hello@coastlineheatpumps.co.uk</a> or pass on our number: 01872 000 000.</span>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back-to-intro">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+  </div>
+  <p class="quote-intro-footnote wizard-footnote">Your details are private. We don't share or sell them.</p>
 </section>
 
 <!-- FOOTER (same as homepage) -->
@@ -113,14 +154,87 @@
 </footer>
 
 <script>
-// Minimal handler — Start does nothing yet.
-// We'll wire it up to the first wizard step when we add it.
-document.addEventListener('click', e => {
-  const action = e.target.closest('[data-action]')?.dataset.action;
-  if (action === 'start') {
-    // First question goes here.
+(function () {
+  const TOTAL = 12;
+  const state = { step: 1, answers: { ownership: '' } };
+
+  const $  = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+
+  // Step validators — add new entries as we add questions.
+  const validators = {
+    1: a => a.ownership === 'own' || a.ownership === 'landlord'
+  };
+
+  function isStepValid(n) {
+    return validators[n] ? validators[n](state.answers) : false;
   }
-});
+
+  function showIntro() {
+    $('#quoteIntro').hidden = false;
+    $('#quoteWizard').hidden = true;
+    $('#stepCounter').hidden = true;
+    $('#navLinks').hidden = false;
+    $('#navCta').hidden = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showWizard() {
+    $('#quoteIntro').hidden = true;
+    $('#quoteWizard').hidden = false;
+    $('#stepCounter').hidden = false;
+    $('#navLinks').hidden = true;
+    $('#navCta').hidden = true;
+    setStep(state.step);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setStep(n) {
+    state.step = n;
+    $$('.quote-step').forEach(el => el.classList.remove('active'));
+    const target = $(`.quote-step[data-step="${n}"]`);
+    if (target) target.classList.add('active');
+    $('#qpStepNum').textContent = n;
+    refreshContinue();
+  }
+
+  function refreshContinue() {
+    const active = $('.quote-step.active');
+    if (!active) return;
+    const next = active.querySelector('[data-action="next"], [data-action="submit"]');
+    if (next) next.disabled = !isStepValid(state.step);
+  }
+
+  // Radio change handler — covers all current and future radio steps.
+  document.addEventListener('change', e => {
+    const t = e.target;
+    if (t.matches('input[type="radio"]')) {
+      state.answers[t.name] = t.value;
+
+      // Step 1 specific: show the rent notice when "rent" is picked.
+      if (t.name === 'ownership') {
+        $('#rentNotice').hidden = (t.value !== 'rent');
+      }
+
+      refreshContinue();
+    }
+  });
+
+  // Click handler for nav buttons.
+  document.addEventListener('click', e => {
+    const action = e.target.closest('[data-action]')?.dataset.action;
+    if (!action) return;
+    if (action === 'start') {
+      showWizard();
+    } else if (action === 'back-to-intro') {
+      showIntro();
+    } else if (action === 'next' && isStepValid(state.step) && state.step < TOTAL) {
+      setStep(state.step + 1);
+    } else if (action === 'back' && state.step > 1) {
+      setStep(state.step - 1);
+    }
+  });
+})();
 </script>
 
 </body>

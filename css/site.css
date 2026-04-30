@@ -657,6 +657,53 @@ html, body { margin: 0; padding: 0; }
 
 /* ============================================================ QUOTE CALCULATOR */
 
+/* Nav step counter (replaces phone CTA when wizard is active) */
+.step-counter {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--coastal-mist);
+  font-weight: 500;
+}
+
+/* Wizard layout — no card, content sits directly on bone background */
+.wizard {
+  padding: 80px 0 32px;
+  background: var(--bone);
+  min-height: calc(100vh - 76px);
+  display: flex;
+  flex-direction: column;
+}
+.wizard > .container-read { flex: 1; }
+.wizard-footnote {
+  text-align: center;
+  font-size: 13px;
+  color: var(--pebble);
+  margin: 64px 0 0;
+  letter-spacing: 0.02em;
+}
+
+/* Step heading style for wizard (h2 inside step) */
+.wizard .quote-step h2 {
+  font-size: 36px;
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.wizard .quote-step .eyebrow { margin-bottom: 16px; }
+.wizard .quote-step .quote-helper {
+  font-size: 17px;
+  color: var(--coastal-mist);
+  line-height: 1.55;
+  margin: 0 0 40px;
+  max-width: none;
+}
+@media (max-width: 600px) {
+  .wizard { padding: 48px 0 24px; }
+  .wizard .quote-step h2 { font-size: 26px; }
+}
+
+
 /* Intro hero (left-aligned, compressed) */
 .hero.hero--quote {
   padding: 64px 0 24px;
@@ -784,7 +831,7 @@ html, body { margin: 0; padding: 0; }
   max-width: none;
 }
 
-/* Option cards (radio) */
+/* Option cards (radio is visually hidden — whole card is the click target) */
 .quote-options {
   display: grid;
   gap: 12px;
@@ -792,27 +839,30 @@ html, body { margin: 0; padding: 0; }
 }
 .quote-option {
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 18px 20px;
+  align-items: center;
+  padding: 22px 24px;
   border: 1px solid var(--stone);
   border-radius: var(--radius-md);
   background: var(--white);
   cursor: pointer;
   transition:
     border-color var(--dur-fast) var(--ease-default),
-    background var(--dur-fast) var(--ease-default);
+    background var(--dur-fast) var(--ease-default),
+    box-shadow var(--dur-fast) var(--ease-default);
+  position: relative;
 }
 .quote-option:hover { border-color: var(--coastal-mist); }
 .quote-option input[type="radio"] {
-  width: 18px;
-  height: 18px;
-  margin-top: 2px;
-  accent-color: var(--copper);
-  cursor: pointer;
-  flex-shrink: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
 }
-.quote-option .opt-text { display: flex; flex-direction: column; gap: 2px; }
+.quote-option .opt-text { display: flex; flex-direction: column; gap: 2px; flex: 1; }
 .quote-option .label {
   font-size: 16px;
   color: var(--slate-blue);
@@ -826,7 +876,12 @@ html, body { margin: 0; padding: 0; }
 }
 .quote-option:has(input:checked) {
   border-color: var(--slate-blue);
-  background: rgba(46,71,86,0.03);
+  background: rgba(46,71,86,0.04);
+  box-shadow: 0 0 0 1px var(--slate-blue);
+}
+.quote-option:focus-within {
+  border-color: var(--slate-blue);
+  box-shadow: 0 0 0 3px rgba(46,71,86,0.12);
 }
 
 /* Text inputs */
