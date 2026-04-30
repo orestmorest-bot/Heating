@@ -687,6 +687,21 @@ html, body { margin: 0; padding: 0; }
   letter-spacing: 0.02em;
 }
 
+/* Auxiliary link below option groups (e.g. "Check or order an EPC at gov.uk →") */
+.quote-aux-link {
+  display: inline-block;
+  color: var(--coastal-mist);
+  font-size: 14px;
+  margin: -24px 0 8px;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-fast) var(--ease-default), border-color var(--dur-fast) var(--ease-default);
+}
+.quote-aux-link:hover {
+  color: var(--copper);
+  border-bottom-color: var(--copper);
+}
+
 /* Full-width primary button (used on tenant flow) */
 .btn--block {
   width: 100%;

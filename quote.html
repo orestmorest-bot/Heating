@@ -152,6 +152,39 @@
       </div>
     </div>
 
+    <!-- STEP 4: EPC -->
+    <div class="quote-step" data-step="4">
+      <span class="eyebrow">Energy Performance Certificate</span>
+      <h2>Do you have a valid EPC?</h2>
+      <p class="quote-helper">An Energy Performance Certificate is required for the £7,500 grant. If you don't have one, you can order one from gov.uk for around £60.</p>
+
+      <div class="quote-options" role="radiogroup">
+        <label class="quote-option">
+          <input type="radio" name="epc" value="valid">
+          <span class="opt-text"><span class="label">Yes, I have a valid one</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="epc" value="need">
+          <span class="opt-text"><span class="label">I'd need to get one</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="epc" value="exempt">
+          <span class="opt-text"><span class="label">The property is exempt</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="epc" value="unsure">
+          <span class="opt-text"><span class="label">I'm not sure</span></span>
+        </label>
+      </div>
+
+      <a href="https://www.gov.uk/find-energy-certificate" target="_blank" rel="noopener" class="quote-aux-link">Check or order an EPC at gov.uk <span aria-hidden="true">→</span></a>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -243,7 +276,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', currentHeating: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -261,6 +294,7 @@
     1:        a => ['own', 'landlord', 'rent'].includes(a.ownership),
     2:        a => isUkPostcode(a.postcode),
     3:        a => !!a.currentHeating,
+    4:        a => !!a.epc,
     tenant:   a => isEmail(a.tenantEmail)
   };
 
