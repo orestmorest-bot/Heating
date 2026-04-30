@@ -1,0 +1,175 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap");
+
+:root {
+  /* COLOURS */
+  --slate-blue:      #2E4756;
+  --coastal-mist:    #6B8693;
+  --granite:         #3A3D40;
+  --bone:            #F4F1EC;
+  --white:           #FFFFFF;
+  --stone:           #E5E1D8;
+  --pebble:          #A8A39A;
+  --copper:          #B86D3F;
+  --copper-hover:    #A4602F;
+  --forest:          #3F5D4A;
+  --warning:         #A85B3F;
+  --information:     #5A7A8C;
+
+  --bg:              var(--bone);
+  --surface:         var(--white);
+  --surface-soft:    var(--stone);
+  --border:          var(--stone);
+  --border-strong:   var(--coastal-mist);
+  --fg:              var(--granite);
+  --fg-strong:       var(--slate-blue);
+  --fg-muted:        var(--pebble);
+  --fg-on-dark:      var(--white);
+  --fg-on-copper:    var(--white);
+  --accent:          var(--copper);
+  --accent-hover:    var(--copper-hover);
+  --positive:        var(--forest);
+  --negative:        var(--warning);
+  --info:            var(--information);
+
+  /* TYPE */
+  --serif-display:   "Fraunces", "Iowan Old Style", "Charter", "Georgia", serif;
+  --sans-body:       "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+
+  --fs-h1:      56px;
+  --fs-h2:      40px;
+  --fs-h3:      28px;
+  --fs-h4:      20px;
+  --fs-lead:    19px;
+  --fs-body:    17px;
+  --fs-small:   14px;
+  --fs-btn:     16px;
+  --fs-eyebrow: 12px;
+
+  --lh-tight:  1.1;
+  --lh-snug:   1.2;
+  --lh-h3:     1.3;
+  --lh-h4:     1.4;
+  --lh-body:   1.65;
+  --lh-lead:   1.6;
+  --lh-small:  1.5;
+
+  --tr-h1:     -0.02em;
+  --tr-h2:     -0.01em;
+  --tr-btn:     0.01em;
+  --tr-eyebrow: 0.08em;
+
+  /* SPACE */
+  --space-tight:  4px;
+  --space-xs:     8px;
+  --space-sm:    16px;
+  --space-md:    24px;
+  --space-lg:    32px;
+  --space-xl:    48px;
+  --space-2xl:   64px;
+  --space-3xl:   96px;
+  --space-4xl:  128px;
+
+  /* RADII / SHADOWS */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --border-hairline:  1px solid var(--stone);
+  --border-strong-1:  1px solid var(--coastal-mist);
+
+  --shadow-card:   0 1px 2px rgba(46,71,86,0.04), 0 2px 8px rgba(46,71,86,0.04);
+  --shadow-widget: 0 4px 12px rgba(46,71,86,0.06), 0 16px 40px rgba(46,71,86,0.08);
+  --shadow-float:  0 8px 24px rgba(46,71,86,0.10);
+
+  /* MOTION */
+  --ease-default: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --dur-fast:    150ms;
+  --dur-base:    200ms;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif-display);
+  color: var(--fg-strong);
+  margin: 0 0 var(--space-md);
+  text-wrap: balance;
+}
+h1 {
+  font-size: var(--fs-h1);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tr-h1);
+}
+h2 {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tr-h2);
+}
+h3 {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: var(--lh-h3);
+}
+h4 {
+  font-family: var(--sans-body);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  line-height: var(--lh-h4);
+  color: var(--fg-strong);
+  margin: 0 0 var(--space-sm);
+}
+p {
+  margin: 0 0 var(--space-md);
+  max-width: 65ch;
+  text-wrap: pretty;
+}
+.lead {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-lead);
+  color: var(--fg-strong);
+}
+small, .small, .caption {
+  font-size: var(--fs-small);
+  line-height: var(--lh-small);
+  color: var(--fg-muted);
+}
+.eyebrow {
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase;
+  color: var(--coastal-mist);
+}
+a {
+  color: var(--slate-blue);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-default);
+}
+a:hover {
+  color: var(--copper);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+::selection { background: var(--slate-blue); color: var(--white); }
+
+@media (max-width: 720px) {
+  :root {
+    --fs-h1: 40px;
+    --fs-h2: 32px;
+    --fs-h3: 24px;
+  }
+}
