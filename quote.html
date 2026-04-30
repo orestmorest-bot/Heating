@@ -114,6 +114,44 @@
       </div>
     </div>
 
+    <!-- STEP 3: Current heating -->
+    <div class="quote-step" data-step="3">
+      <span class="eyebrow">Current heating</span>
+      <h2>What heats your home at the moment?</h2>
+
+      <div class="quote-options" role="radiogroup">
+        <label class="quote-option">
+          <input type="radio" name="currentHeating" value="gas">
+          <span class="opt-text"><span class="label">Gas boiler</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="currentHeating" value="oil">
+          <span class="opt-text"><span class="label">Oil boiler</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="currentHeating" value="lpg">
+          <span class="opt-text"><span class="label">LPG (liquefied petroleum gas)</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="currentHeating" value="electric">
+          <span class="opt-text"><span class="label">Electric storage heaters</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="currentHeating" value="heat-pump">
+          <span class="opt-text"><span class="label">An existing heat pump</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="currentHeating" value="none">
+          <span class="opt-text"><span class="label">No central heating</span></span>
+        </label>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -205,7 +243,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -222,6 +260,7 @@
   const validators = {
     1:        a => ['own', 'landlord', 'rent'].includes(a.ownership),
     2:        a => isUkPostcode(a.postcode),
+    3:        a => !!a.currentHeating,
     tenant:   a => isEmail(a.tenantEmail)
   };
 
