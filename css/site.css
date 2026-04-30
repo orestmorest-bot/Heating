@@ -656,20 +656,97 @@ html, body { margin: 0; padding: 0; }
 .footer-bottom a:hover { color: var(--slate-blue); }
 
 /* ============================================================ QUOTE CALCULATOR */
-.quote-body { background: var(--bone); }
-.nav--quote .nav-inner { justify-content: space-between; }
-.quote-stepcount {
+
+/* Intro hero (left-aligned, compressed) */
+.hero.hero--quote {
+  padding: 64px 0 24px;
+  text-align: left;
+}
+.hero--quote h1 {
+  margin: 0 0 16px;
+  max-width: 18ch;
+}
+.hero--quote .lead {
+  margin: 0 0 56px;
+  max-width: 60ch;
+  color: var(--granite);
+}
+
+/* Intro benefits */
+.quote-benefits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-bottom: 56px;
+}
+.quote-benefit { display: flex; flex-direction: column; gap: 12px; }
+.quote-benefit .icon {
+  width: 28px;
+  height: 28px;
+  color: var(--slate-blue);
+  flex-shrink: 0;
+}
+.quote-benefit .text {
+  font-size: 16px;
+  color: var(--granite);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.quote-intro-cta {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 64px;
+}
+
+.quote-intro-footnote {
+  text-align: center;
   font-size: 13px;
-  letter-spacing: 0.06em;
+  color: var(--pebble);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 600px) {
+  .quote-benefits { grid-template-columns: 1fr; gap: 20px; }
+  .quote-intro-cta { justify-content: stretch; }
+  .quote-intro-cta .btn { width: 100%; justify-content: center; }
+}
+
+/* Wizard section */
+.quote-section {
+  padding-top: 32px;
+  padding-bottom: 96px;
+}
+
+/* Card */
+.quote-card {
+  background: var(--white);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.quote-card-head {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 32px;
+  border-bottom: 1px solid var(--stone);
+  background: var(--bone);
+}
+.step-tag {
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--coastal-mist);
   font-weight: 500;
+  white-space: nowrap;
 }
+.quote-card-head .quote-progress-bar { flex: 1; }
+.quote-card-body { padding: 40px 32px; }
 
-.quote-page { padding: 64px 0 96px; min-height: 70vh; }
-.quote-shell { max-width: 640px; margin: 0 auto; padding: 0 24px; }
-
-.quote-progress-wrap { margin-bottom: 56px; }
+/* Progress bar */
 .quote-progress-bar {
   height: 3px;
   background: var(--stone);
@@ -690,12 +767,14 @@ html, body { margin: 0; padding: 0; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.quote-step .eyebrow { margin-bottom: 12px; }
-.quote-step h2 {
-  font-size: 32px;
+.quote-step h3 {
+  font-family: var(--serif-display);
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--slate-blue);
+  margin: 0 0 12px;
   letter-spacing: -0.01em;
-  margin-bottom: 12px;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 .quote-step .quote-helper {
   font-size: 17px;
@@ -825,64 +904,30 @@ html, body { margin: 0; padding: 0; }
 }
 
 /* Result page */
-.quote-result-card {
-  background: var(--white);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius-lg);
-  padding: 40px 32px;
-  text-align: center;
-  margin-bottom: 24px;
-}
-.quote-result-card .small-label {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--coastal-mist);
-  margin-bottom: 14px;
-  font-weight: 500;
-}
-.quote-result-card .price {
-  font-family: var(--serif-display);
-  font-size: 44px;
-  font-weight: 600;
-  color: var(--slate-blue);
-  margin-bottom: 10px;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-.quote-result-card .after-grant {
-  font-size: 14px;
-  color: var(--granite);
-}
+.result-eyebrow { margin-bottom: 8px; }
 
-.quote-breakdown {
-  background: var(--white);
-  border: 1px solid var(--stone);
+.quote-cost-rows {
+  background: var(--bone);
   border-radius: var(--radius-md);
   padding: 24px 28px;
-  margin-bottom: 24px;
-}
-.quote-breakdown h4 {
-  font-family: var(--sans-body);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--slate-blue);
-  margin: 0 0 16px;
-  font-weight: 600;
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.quote-disclaimer {
+.result-caption {
   background: rgba(90,122,140,0.08);
   border-left: 3px solid var(--information);
   padding: 16px 20px;
   font-size: 14px;
   color: var(--granite);
   border-radius: var(--radius-sm);
-  margin-bottom: 24px;
+  margin: 24px 0;
   line-height: 1.6;
+  max-width: none;
 }
-.quote-disclaimer strong { color: var(--slate-blue); }
+.result-caption strong { color: var(--slate-blue); }
 
 .quote-eligibility-warning {
   background: rgba(184,109,63,0.08);
@@ -899,14 +944,32 @@ html, body { margin: 0; padding: 0; }
 }
 .quote-eligibility-warning strong { color: var(--slate-blue); }
 
-.quote-next {
+/* Rent notice (shown when "I rent" is selected on step 1) */
+.rent-notice {
+  background: rgba(184,109,63,0.08);
+  border-left: 3px solid var(--copper);
+  padding: 16px 20px;
+  font-size: 14px;
+  color: var(--granite);
+  border-radius: var(--radius-sm);
+  margin: 0 0 24px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rent-notice strong { color: var(--slate-blue); }
+.rent-notice a { color: var(--copper); border-bottom: 1px solid currentColor; }
+.rent-notice a:hover { color: var(--copper-hover); }
+
+.result-next {
   background: var(--slate-blue);
   color: var(--white);
   padding: 28px 32px;
   border-radius: var(--radius-md);
-  margin-bottom: 32px;
+  margin: 24px 0 32px;
 }
-.quote-next h4 {
+.result-next h4 {
   color: var(--white);
   font-family: var(--serif-display);
   font-size: 22px;
@@ -914,29 +977,28 @@ html, body { margin: 0; padding: 0; }
   margin: 0 0 8px;
   letter-spacing: -0.005em;
 }
-.quote-next p {
+.result-next p {
   color: rgba(255,255,255,0.85);
   font-size: 15px;
   line-height: 1.65;
   margin: 0;
   max-width: none;
 }
+.result-next strong { color: var(--white); }
 
-.quote-summary {
-  font-size: 13px;
-  color: var(--pebble);
+.result-actions {
   text-align: center;
-  margin-bottom: 32px;
-  letter-spacing: 0.01em;
+  margin-top: 8px;
 }
-.quote-restart { text-align: center; }
 
 @media (max-width: 600px) {
-  .quote-step h2 { font-size: 26px; }
-  .quote-result-card .price { font-size: 36px; }
-  .quote-result-card { padding: 32px 24px; }
-  .quote-next { padding: 24px; }
-  .nav--quote .quote-stepcount { font-size: 12px; }
+  .quote-step h3 { font-size: 22px; }
+  .quote-card-head { padding: 16px 20px; gap: 16px; }
+  .quote-card-body { padding: 28px 20px; }
+  .result-next { padding: 24px; }
+  .step-tag { font-size: 11px; }
+  .hero--quote { padding-top: 32px; }
+  .quote-section { padding-bottom: 64px; }
 }
 
 /* ============================================================ RESPONSIVE */
