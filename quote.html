@@ -101,6 +101,24 @@
       </div>
     </div>
 
+    <!-- STEP 2: Postcode -->
+    <div class="quote-step" data-step="2">
+      <span class="eyebrow">Where is the property?</span>
+      <h2>What's the postcode?</h2>
+      <p class="quote-helper">The grant is available across England and Wales. Different schemes apply in Scotland and Northern Ireland.</p>
+
+      <div class="quote-input">
+        <label for="postcode">Postcode</label>
+        <input type="text" id="postcode" name="postcode" autocomplete="postal-code" placeholder="e.g. TR1 2NF" autocapitalize="characters">
+        <div class="quote-error" id="postcodeError" role="alert"></div>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
   </div>
   <p class="quote-intro-footnote wizard-footnote">Your details are private. We don't share or sell them.</p>
 </section>
@@ -156,14 +174,19 @@
 <script>
 (function () {
   const TOTAL = 12;
-  const state = { step: 1, answers: { ownership: '' } };
+  const state = { step: 1, answers: { ownership: '', postcode: '' } };
 
   const $  = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
 
+  const isUkPostcode = p =>
+    /^[A-Z]{1,2}\d{1,2}[A-Z]?\s?\d[A-Z]{2}$/i
+      .test((p || '').replace(/\s+/g, ' ').trim());
+
   // Step validators — add new entries as we add questions.
   const validators = {
-    1: a => a.ownership === 'own' || a.ownership === 'landlord'
+    1: a => a.ownership === 'own' || a.ownership === 'landlord',
+    2: a => isUkPostcode(a.postcode)
   };
 
   function isStepValid(n) {
@@ -196,6 +219,10 @@
     if (target) target.classList.add('active');
     $('#qpStepNum').textContent = n;
     refreshContinue();
+
+    // Auto-focus first text input on the new step
+    const txt = target?.querySelector('input[type="text"], input[type="email"], input[type="tel"]');
+    if (txt) setTimeout(() => txt.focus(), 200);
   }
 
   function refreshContinue() {
@@ -217,6 +244,35 @@
       }
 
       refreshContinue();
+    }
+  });
+
+  // Text input handler — postcode, name, email, phone, etc.
+  document.addEventListener('input', e => {
+    const t = e.target;
+    if (t.matches('input[type="text"], input[type="email"], input[type="tel"]')) {
+      state.answers[t.name] = t.value;
+
+      // Step 2 specific: format error if postcode looks malformed.
+      if (t.name === 'postcode') {
+        const err = $('#postcodeError');
+        if (t.value && !isUkPostcode(t.value)) {
+          err.textContent = "That doesn't look like a UK postcode.";
+        } else {
+          err.textContent = '';
+        }
+      }
+
+      refreshContinue();
+    }
+  });
+
+  // Enter to advance from text inputs.
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.matches('input[type="text"], input[type="email"], input[type="tel"]')) {
+      e.preventDefault();
+      const trigger = $('.quote-step.active')?.querySelector('[data-action="next"], [data-action="submit"]');
+      if (trigger && !trigger.disabled) trigger.click();
     }
   });
 
