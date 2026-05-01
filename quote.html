@@ -362,6 +362,33 @@
       </div>
     </div>
 
+    <!-- STEP 10: Hot water cylinder -->
+    <div class="quote-step" data-step="10">
+      <span class="eyebrow">Hot water</span>
+      <h2>Do you currently have a hot water cylinder?</h2>
+      <p class="quote-helper">If you have a combi boiler, you'll likely need a new cylinder added — we'll factor that into the cost.</p>
+
+      <div class="quote-options" role="radiogroup">
+        <label class="quote-option">
+          <input type="radio" name="cylinder" value="yes">
+          <span class="opt-text"><span class="label">Yes, I have a cylinder</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="cylinder" value="combi">
+          <span class="opt-text"><span class="label">No, I have a combi boiler</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="cylinder" value="unsure">
+          <span class="opt-text"><span class="label">I'm not sure</span></span>
+        </label>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -453,7 +480,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', radiators: '', outdoorSpace: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', radiators: '', outdoorSpace: '', cylinder: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -480,6 +507,7 @@
     7:        a => !!a.propertyAge,
     8:        a => !!a.radiators,
     9:        a => !!a.outdoorSpace,
+    10:       a => !!a.cylinder,
     tenant:   a => isEmail(a.tenantEmail)
   };
 
