@@ -248,6 +248,27 @@
       </div>
     </div>
 
+    <!-- STEP 6: Floor area -->
+    <div class="quote-step" data-step="6">
+      <span class="eyebrow">Property size</span>
+      <h2>Roughly how big is the property?</h2>
+      <p class="quote-helper">The total floor area in square metres. You can find this on your EPC, or estimate it.</p>
+
+      <div class="quote-field">
+        <label class="quote-field-label" for="floorArea">Floor area</label>
+        <div class="quote-input-suffix">
+          <input type="number" id="floorArea" name="floorArea" min="20" max="1000" step="1" placeholder="140" inputmode="numeric">
+          <span class="suffix" aria-hidden="true">m²</span>
+        </div>
+        <button type="button" class="quote-aux-link" data-action="estimate-area">Don't know? I'll estimate from bedrooms</button>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -339,7 +360,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -359,8 +380,15 @@
     3:        a => !!a.currentHeating,
     4:        a => !!a.epc,
     5:        a => !!a.propertyType && !!a.bedrooms,
+    6:        a => {
+                  const v = parseInt(a.floorArea, 10);
+                  return Number.isFinite(v) && v >= 20 && v <= 1000;
+                },
     tenant:   a => isEmail(a.tenantEmail)
   };
+
+  // Rough UK averages — used by "estimate from bedrooms" on step 6.
+  const areaFromBedrooms = { '1': 50, '2': 75, '3': 95, '4': 130, '5+': 170 };
 
   function isStepValid(n) {
     return validators[n] ? validators[n](state.answers) : false;
@@ -422,10 +450,10 @@
     }
   });
 
-  // Text input handler — postcode, name, email, phone, etc.
+  // Text/number input handler — postcode, floor area, name, email, phone, etc.
   document.addEventListener('input', e => {
     const t = e.target;
-    if (t.matches('input[type="text"], input[type="email"], input[type="tel"]')) {
+    if (t.matches('input[type="text"], input[type="email"], input[type="tel"], input[type="number"]')) {
       state.answers[t.name] = t.value;
 
       // Step 2 specific: format error if postcode looks malformed.
@@ -444,7 +472,7 @@
 
   // Enter to advance from text inputs.
   document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.target.matches('input[type="text"], input[type="email"], input[type="tel"]')) {
+    if (e.key === 'Enter' && e.target.matches('input[type="text"], input[type="email"], input[type="tel"], input[type="number"]')) {
       e.preventDefault();
       const trigger = $('.quote-step.active')?.querySelector('[data-action="next"], [data-action="submit"]');
       if (trigger && !trigger.disabled) trigger.click();
@@ -477,6 +505,14 @@
         name: state.answers.tenantName
       });
       setStep('tenant-thanks');
+    } else if (action === 'estimate-area') {
+      const v = areaFromBedrooms[state.answers.bedrooms] || 95;
+      const input = $('#floorArea');
+      if (input) {
+        input.value = v;
+        state.answers.floorArea = String(v);
+        refreshContinue();
+      }
     }
   });
 })();

@@ -750,12 +750,18 @@ html, body { margin: 0; padding: 0; }
   .quote-tile { min-height: 64px; }
 }
 
-/* Auxiliary link below option groups (e.g. "Check or order an EPC at gov.uk →") */
+/* Auxiliary link / button — small subdued action below options or inputs */
 .quote-aux-link {
   display: inline-block;
   color: var(--coastal-mist);
   font-size: 14px;
-  margin: -24px 0 8px;
+  margin-top: 12px;
+  font-family: var(--sans-body);
+  font-weight: 400;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: color var(--dur-fast) var(--ease-default), border-color var(--dur-fast) var(--ease-default);
@@ -763,6 +769,45 @@ html, body { margin: 0; padding: 0; }
 .quote-aux-link:hover {
   color: var(--copper);
   border-bottom-color: var(--copper);
+}
+/* Tighten the gap when this link follows an option group (e.g. EPC step) */
+.quote-options + .quote-aux-link { margin-top: -24px; margin-bottom: 8px; }
+
+/* Number / text input with a unit suffix (e.g. "140  m²") */
+.quote-input-suffix { position: relative; }
+.quote-input-suffix > input {
+  width: 100%;
+  padding: 18px 56px 18px 20px;
+  font-size: 17px;
+  font-family: var(--sans-body);
+  background: var(--white);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  color: var(--granite);
+  transition:
+    border-color var(--dur-fast) var(--ease-default),
+    box-shadow var(--dur-fast) var(--ease-default);
+  -moz-appearance: textfield;
+}
+.quote-input-suffix > input::placeholder { color: var(--pebble); }
+.quote-input-suffix > input::-webkit-outer-spin-button,
+.quote-input-suffix > input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.quote-input-suffix > input:focus {
+  outline: none;
+  border-color: var(--slate-blue);
+  box-shadow: 0 0 0 3px rgba(46,71,86,0.08);
+}
+.quote-input-suffix > .suffix {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--pebble);
+  font-size: 16px;
+  pointer-events: none;
 }
 
 /* Full-width primary button (used on tenant flow) */
