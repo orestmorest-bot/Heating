@@ -389,6 +389,33 @@
       </div>
     </div>
 
+    <!-- STEP 11: Budget (calculation) -->
+    <div class="quote-step" data-step="11">
+      <span class="eyebrow">Budget</span>
+      <h2 id="budgetH2">A heat pump install costs <span id="budgetPreRange">£10,000–£18,000</span> before the grant.</h2>
+      <p class="quote-helper" id="budgetHelper">After the £7,500 grant, most homeowners pay <span id="budgetPostRange">£3,000 to £10,000</span>. Costs vary depending on your property. Are you comfortable with that range?</p>
+
+      <div class="quote-options" role="radiogroup">
+        <label class="quote-option">
+          <input type="radio" name="budget" value="comfortable">
+          <span class="opt-text"><span class="label">Yes, that's roughly what I expected</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="budget" value="finance">
+          <span class="opt-text"><span class="label">I'd want to look at finance options</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="budget" value="too-high">
+          <span class="opt-text"><span class="label">That's higher than I expected</span></span>
+        </label>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -480,7 +507,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', radiators: '', outdoorSpace: '', cylinder: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', radiators: '', outdoorSpace: '', cylinder: '', budget: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -508,6 +535,7 @@
     8:        a => !!a.radiators,
     9:        a => !!a.outdoorSpace,
     10:       a => !!a.cylinder,
+    11:       a => !!a.budget,
     tenant:   a => isEmail(a.tenantEmail)
   };
 
@@ -522,6 +550,78 @@
   };
   function estimateArea(type, beds) {
     return (areaEstimate[type] && areaEstimate[type][beds]) || 95;
+  }
+
+  // ─── Cost calculation ─────────────────────────────────────────────────
+  // All numbers indicative — final quote comes after the home survey.
+  function calculateQuote(a) {
+    const area = Math.max(20, parseInt(a.floorArea, 10) || 95);
+
+    // Base £/m² — varies by property type
+    let perLow = 100, perHigh = 150;
+    if (a.propertyType === 'detached') { perLow += 10; perHigh += 15; }
+    if (a.propertyType === 'flat')     { perLow -= 10; perHigh -= 10; }
+
+    let low  = area * perLow;
+    let high = area * perHigh;
+
+    // Older properties tend to need extra insulation/pipework
+    if (a.propertyAge === 'pre-1930')   { low += 1500; high += 3000; }
+    else if (a.propertyAge === '1930-1980') { low += 500; high += 1500; }
+
+    // Radiator upgrade likelihood
+    if (a.radiators === 'small')                       { low += 2500; high += 4500; }
+    else if (a.radiators === 'mix' || a.radiators === 'unsure') { low += 1000; high += 2000; }
+
+    // Combi boilers need a new cylinder added
+    if (a.cylinder === 'combi')       { low += 1500; high += 2500; }
+    else if (a.cylinder === 'unsure') { low += 800;  high += 1500; }
+
+    // Limited outdoor space = slightly more complex install
+    if (a.outdoorSpace === 'side')    { low += 300; high += 800; }
+
+    // No central heating = significantly more pipework
+    if (a.currentHeating === 'none')  { low += 2000; high += 3500; }
+
+    // Round to the nearest £500
+    low  = Math.round(low  / 500) * 500;
+    high = Math.round(high / 500) * 500;
+
+    // BUS grant eligibility (rough)
+    const eligible =
+      ['own', 'landlord'].includes(a.ownership) &&
+      ['oil', 'lpg', 'gas', 'electric'].includes(a.currentHeating) &&
+      a.epc === 'valid';
+    const grant = eligible ? 7500 : 0;
+
+    return {
+      preLow:  low,
+      preHigh: high,
+      grant,
+      eligible,
+      postLow:  Math.max(0, low  - grant),
+      postHigh: Math.max(0, high - grant)
+    };
+  }
+
+  const fmtMoney = n => '£' + n.toLocaleString('en-GB');
+
+  function renderBudget() {
+    const c = calculateQuote(state.answers);
+    const $h2     = $('.quote-step[data-step="11"] h2');
+    const $helper = $('.quote-step[data-step="11"] .quote-helper');
+    const preRange  = `${fmtMoney(c.preLow)}–${fmtMoney(c.preHigh)}`;
+    const postRange = `${fmtMoney(c.postLow)} to ${fmtMoney(c.postHigh)}`;
+
+    $h2.textContent = `A heat pump install costs ${preRange} before the grant.`;
+
+    if (c.eligible) {
+      $helper.textContent =
+        `After the £7,500 grant, most homeowners pay ${postRange}. Costs vary depending on your property. Are you comfortable with that range?`;
+    } else {
+      $helper.textContent =
+        `Based on your answers, you may not qualify for the £7,500 grant — we'll talk you through the options. Costs vary depending on your property. Are you comfortable with that range?`;
+    }
   }
 
   function isStepValid(n) {
@@ -561,10 +661,13 @@
       $('#stepCounter').hidden = true;
     }
 
+    // Per-step render hooks
+    if (n === 11) renderBudget();
+
     refreshContinue();
 
     // Auto-focus first text input on the new step
-    const txt = target?.querySelector('input[type="text"], input[type="email"], input[type="tel"]');
+    const txt = target?.querySelector('input[type="text"], input[type="email"], input[type="tel"], input[type="number"]');
     if (txt) setTimeout(() => txt.focus(), 200);
   }
 
