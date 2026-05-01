@@ -159,7 +159,7 @@ html, body { margin: 0; padding: 0; }
   display: block;
 }
 .photo--hero {
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 17 / 9;
   margin-top: 56px;
   border-radius: var(--radius-lg);
 }
