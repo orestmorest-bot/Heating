@@ -416,6 +416,48 @@
       </div>
     </div>
 
+    <!-- STEP 12: Timeline (final main-flow step) -->
+    <div class="quote-step" data-step="12">
+      <span class="eyebrow">Timeline</span>
+      <h2>When are you hoping to install?</h2>
+
+      <div class="quote-options" role="radiogroup">
+        <label class="quote-option">
+          <input type="radio" name="timeline" value="3m">
+          <span class="opt-text"><span class="label">Within 3 months</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="timeline" value="3-6m">
+          <span class="opt-text"><span class="label">3 to 6 months</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="timeline" value="6-12m">
+          <span class="opt-text"><span class="label">6 to 12 months</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="timeline" value="research">
+          <span class="opt-text"><span class="label">I'm just researching</span></span>
+        </label>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="submit" disabled>See my estimate <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- ESTIMATE READY (placeholder — replace with your results-page design) -->
+    <div class="quote-step" data-step="estimate-ready">
+      <span class="eyebrow">Your estimate</span>
+      <h2>Thanks — your estimate is ready.</h2>
+      <p class="quote-helper">Based on your answers, your install would cost roughly <strong id="estimatePreRange">£10,000–£18,000</strong> before the grant<span id="estimateAfter">, around <strong id="estimatePostRange">£3,000 to £10,000</strong> after the £7,500 grant</span>.</p>
+      <p class="quote-helper"><em>This page is a placeholder — design the results screen properly in the next step.</em></p>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back-to-intro">← Start again</button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -507,7 +549,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', radiators: '', outdoorSpace: '', cylinder: '', budget: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', radiators: '', outdoorSpace: '', cylinder: '', budget: '', timeline: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -536,6 +578,7 @@
     9:        a => !!a.outdoorSpace,
     10:       a => !!a.cylinder,
     11:       a => !!a.budget,
+    12:       a => !!a.timeline,
     tenant:   a => isEmail(a.tenantEmail)
   };
 
@@ -606,6 +649,17 @@
 
   const fmtMoney = n => '£' + n.toLocaleString('en-GB');
 
+  function renderEstimate() {
+    const c = calculateQuote(state.answers);
+    $('#estimatePreRange').textContent = `${fmtMoney(c.preLow)}–${fmtMoney(c.preHigh)}`;
+    if (c.eligible) {
+      $('#estimateAfter').hidden = false;
+      $('#estimatePostRange').textContent = `${fmtMoney(c.postLow)} to ${fmtMoney(c.postHigh)}`;
+    } else {
+      $('#estimateAfter').hidden = true;
+    }
+  }
+
   function renderBudget() {
     const c = calculateQuote(state.answers);
     const $h2     = $('.quote-step[data-step="11"] h2');
@@ -663,6 +717,7 @@
 
     // Per-step render hooks
     if (n === 11) renderBudget();
+    if (n === 'estimate-ready') renderEstimate();
 
     refreshContinue();
 
@@ -742,6 +797,10 @@
         name: state.answers.tenantName
       });
       setStep('tenant-thanks');
+    } else if (action === 'submit' && isStepValid(state.step)) {
+      const calc = calculateQuote(state.answers);
+      console.log('[Coastline quote submission]', { ...state.answers, calculation: calc });
+      setStep('estimate-ready');
     } else if (action === 'estimate-area') {
       const v = estimateArea(state.answers.propertyType, state.answers.bedrooms);
       const input = $('#floorArea');
