@@ -750,6 +750,159 @@ html, body { margin: 0; padding: 0; }
   .quote-tile { min-height: 64px; }
 }
 
+/* ─── ESTIMATE READY (results page) ───────────────────────────────────── */
+.estimate-eyebrow { color: var(--copper); margin-bottom: 16px; }
+
+.estimate-card {
+  background: var(--white);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-lg);
+  padding: 8px 32px;
+  margin: 24px 0 32px;
+  box-shadow: var(--shadow-card);
+}
+.estimate-row {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--stone);
+}
+.estimate-row:last-child { border-bottom: none; }
+.estimate-amount {
+  font-family: var(--serif-display);
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--slate-blue);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.estimate-amount--grant { font-size: 24px; }
+.estimate-label {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--coastal-mist);
+  font-weight: 500;
+}
+.estimate-label--accent { color: var(--copper); }
+
+.estimate-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.estimate-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--granite);
+  line-height: 1.5;
+}
+.estimate-features .icon {
+  color: var(--coastal-mist);
+  flex-shrink: 0;
+}
+.estimate-features strong { color: var(--slate-blue); font-weight: 500; }
+
+.estimate-disclaimer {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--granite);
+  margin: 0 0 8px;
+  max-width: none;
+}
+
+/* Booking form */
+.form-divider {
+  border: 0;
+  border-top: 1px solid var(--stone);
+  margin: 40px 0 32px;
+}
+.book-heading {
+  font-family: var(--serif-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--slate-blue);
+  letter-spacing: -0.005em;
+  margin: 0 0 8px;
+}
+.book-helper { margin-bottom: 24px; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 32px;
+}
+.form-field { display: flex; flex-direction: column; }
+.form-field--full { grid-column: 1 / -1; }
+.form-field label {
+  font-size: 13px;
+  color: var(--granite);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.form-field label .optional { color: var(--pebble); font-weight: 400; }
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-family: var(--sans-body);
+  color: var(--granite);
+  background: var(--white);
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-sm);
+  transition:
+    border-color var(--dur-fast) var(--ease-default),
+    box-shadow var(--dur-fast) var(--ease-default);
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(--pebble); }
+.form-field input:focus,
+.form-field textarea:focus,
+.form-field select:focus {
+  outline: none;
+  border-color: var(--slate-blue);
+  box-shadow: 0 0 0 3px rgba(46,71,86,0.08);
+}
+.form-field textarea { resize: vertical; min-height: 80px; }
+.form-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%236B8693' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='1 1 6 6 11 1'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.form-hint { font-size: 12px; color: var(--pebble); margin-top: 6px; }
+
+.btn--block {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 18px 28px;
+  font-size: 16px;
+}
+.form-footer {
+  text-align: center;
+  font-size: 13px;
+  color: var(--pebble);
+  margin: 16px 0 0;
+}
+
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; gap: 14px; }
+  .estimate-card { padding: 4px 20px; }
+  .estimate-amount { font-size: 26px; }
+  .estimate-amount--grant { font-size: 20px; }
+  .book-heading { font-size: 20px; }
+}
+
 /* Auxiliary link / button — small subdued action below options or inputs */
 .quote-aux-link {
   display: inline-block;
