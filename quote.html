@@ -388,7 +388,17 @@
   };
 
   // Rough UK averages — used by "estimate from bedrooms" on step 6.
-  const areaFromBedrooms = { '1': 50, '2': 75, '3': 95, '4': 130, '5+': 170 };
+  // Indexed by property type then bedroom count.
+  const areaEstimate = {
+    detached: { '1': 65, '2': 90,  '3': 115, '4': 150, '5+': 200 },
+    semi:     { '1': 55, '2': 75,  '3': 95,  '4': 125, '5+': 165 },
+    terrace:  { '1': 50, '2': 70,  '3': 90,  '4': 115, '5+': 150 },
+    bungalow: { '1': 55, '2': 75,  '3': 95,  '4': 120, '5+': 150 },
+    flat:     { '1': 40, '2': 60,  '3': 80,  '4': 100, '5+': 130 }
+  };
+  function estimateArea(type, beds) {
+    return (areaEstimate[type] && areaEstimate[type][beds]) || 95;
+  }
 
   function isStepValid(n) {
     return validators[n] ? validators[n](state.answers) : false;
@@ -506,7 +516,7 @@
       });
       setStep('tenant-thanks');
     } else if (action === 'estimate-area') {
-      const v = areaFromBedrooms[state.answers.bedrooms] || 95;
+      const v = estimateArea(state.answers.propertyType, state.answers.bedrooms);
       const input = $('#floorArea');
       if (input) {
         input.value = v;
