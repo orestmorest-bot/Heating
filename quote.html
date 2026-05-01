@@ -300,6 +300,41 @@
       </div>
     </div>
 
+    <!-- STEP 8: Radiators / heat distribution -->
+    <div class="quote-step" data-step="8">
+      <span class="eyebrow">Your heating setup</span>
+      <h2>What kind of radiators do you have?</h2>
+      <p class="quote-helper">Heat pumps work best with larger radiators or underfloor heating. We may need to upgrade some during the install.</p>
+
+      <div class="quote-options" role="radiogroup">
+        <label class="quote-option">
+          <input type="radio" name="radiators" value="small">
+          <span class="opt-text"><span class="label">Standard small radiators</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="radiators" value="mix">
+          <span class="opt-text"><span class="label">A mix of sizes</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="radiators" value="large">
+          <span class="opt-text"><span class="label">Large modern radiators</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="radiators" value="underfloor">
+          <span class="opt-text"><span class="label">Underfloor heating</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="radiators" value="unsure">
+          <span class="opt-text"><span class="label">I'm not sure</span></span>
+        </label>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -391,7 +426,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', radiators: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -416,6 +451,7 @@
                   return Number.isFinite(v) && v >= 20 && v <= 1000;
                 },
     7:        a => !!a.propertyAge,
+    8:        a => !!a.radiators,
     tenant:   a => isEmail(a.tenantEmail)
   };
 
