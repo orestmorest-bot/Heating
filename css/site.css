@@ -984,7 +984,7 @@ html, body { margin: 0; padding: 0; }
 .quote-option {
   display: flex;
   align-items: center;
-  padding: 22px 24px;
+  padding: 22px 52px 22px 24px;
   border: 1px solid var(--stone);
   border-radius: var(--radius-md);
   background: var(--white);
@@ -1023,6 +1023,24 @@ html, body { margin: 0; padding: 0; }
   background: rgba(46,71,86,0.04);
   box-shadow: 0 0 0 1px var(--slate-blue);
 }
+/* Checkmark on the right of the selected option */
+.quote-option::after {
+  content: '';
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E4756' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-default);
+  pointer-events: none;
+}
+.quote-option:has(input:checked)::after { opacity: 1; }
 .quote-option:focus-within {
   border-color: var(--slate-blue);
   box-shadow: 0 0 0 3px rgba(46,71,86,0.12);

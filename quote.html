@@ -269,6 +269,37 @@
       </div>
     </div>
 
+    <!-- STEP 7: Property age -->
+    <div class="quote-step" data-step="7">
+      <span class="eyebrow">Age of the property</span>
+      <h2>Roughly when was it built?</h2>
+      <p class="quote-helper">This affects how much insulation work might be needed alongside the install.</p>
+
+      <div class="quote-options" role="radiogroup">
+        <label class="quote-option">
+          <input type="radio" name="propertyAge" value="pre-1930">
+          <span class="opt-text"><span class="label">Before 1930</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="propertyAge" value="1930-1980">
+          <span class="opt-text"><span class="label">1930 to 1980</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="propertyAge" value="post-1980">
+          <span class="opt-text"><span class="label">After 1980</span></span>
+        </label>
+        <label class="quote-option">
+          <input type="radio" name="propertyAge" value="unsure">
+          <span class="opt-text"><span class="label">I don't know</span></span>
+        </label>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -360,7 +391,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', floorArea: '', propertyAge: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -384,6 +415,7 @@
                   const v = parseInt(a.floorArea, 10);
                   return Number.isFinite(v) && v >= 20 && v <= 1000;
                 },
+    7:        a => !!a.propertyAge,
     tenant:   a => isEmail(a.tenantEmail)
   };
 
