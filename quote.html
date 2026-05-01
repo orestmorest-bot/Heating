@@ -185,6 +185,69 @@
       </div>
     </div>
 
+    <!-- STEP 5: Property type + bedrooms -->
+    <div class="quote-step" data-step="5">
+      <span class="eyebrow">About your home</span>
+      <h2>Tell us about your property.</h2>
+
+      <div class="quote-field">
+        <span class="quote-field-label">Property type</span>
+        <div class="quote-tiles" role="radiogroup" aria-label="Property type">
+          <label class="quote-tile">
+            <input type="radio" name="propertyType" value="detached">
+            <span class="tile-label">Detached</span>
+          </label>
+          <label class="quote-tile">
+            <input type="radio" name="propertyType" value="semi">
+            <span class="tile-label">Semi-detached</span>
+          </label>
+          <label class="quote-tile">
+            <input type="radio" name="propertyType" value="terrace">
+            <span class="tile-label">Terrace</span>
+          </label>
+          <label class="quote-tile">
+            <input type="radio" name="propertyType" value="bungalow">
+            <span class="tile-label">Bungalow</span>
+          </label>
+          <label class="quote-tile">
+            <input type="radio" name="propertyType" value="flat">
+            <span class="tile-label">Flat</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="quote-field">
+        <span class="quote-field-label">Number of bedrooms</span>
+        <div class="quote-tiles" role="radiogroup" aria-label="Number of bedrooms">
+          <label class="quote-tile">
+            <input type="radio" name="bedrooms" value="1">
+            <span class="tile-label">1</span>
+          </label>
+          <label class="quote-tile">
+            <input type="radio" name="bedrooms" value="2">
+            <span class="tile-label">2</span>
+          </label>
+          <label class="quote-tile">
+            <input type="radio" name="bedrooms" value="3">
+            <span class="tile-label">3</span>
+          </label>
+          <label class="quote-tile">
+            <input type="radio" name="bedrooms" value="4">
+            <span class="tile-label">4</span>
+          </label>
+          <label class="quote-tile">
+            <input type="radio" name="bedrooms" value="5+">
+            <span class="tile-label">5+</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="quote-nav">
+        <button type="button" class="btn-back" data-action="back">← Back</button>
+        <button type="button" class="btn btn-primary" data-action="next" disabled>Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
     <!-- TENANT FLOW: side branch from step 1 when "rent" is picked -->
     <div class="quote-step quote-step--tenant" data-step="tenant">
       <span class="eyebrow">A quick note</span>
@@ -276,7 +339,7 @@
   const TOTAL = 12;
   const state = {
     step: 1,
-    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', tenantEmail: '', tenantName: '' }
+    answers: { ownership: '', postcode: '', currentHeating: '', epc: '', propertyType: '', bedrooms: '', tenantEmail: '', tenantName: '' }
   };
 
   const $  = s => document.querySelector(s);
@@ -295,6 +358,7 @@
     2:        a => isUkPostcode(a.postcode),
     3:        a => !!a.currentHeating,
     4:        a => !!a.epc,
+    5:        a => !!a.propertyType && !!a.bedrooms,
     tenant:   a => isEmail(a.tenantEmail)
   };
 

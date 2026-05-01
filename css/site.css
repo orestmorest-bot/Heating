@@ -687,6 +687,69 @@ html, body { margin: 0; padding: 0; }
   letter-spacing: 0.02em;
 }
 
+/* Field label (sentence case, sits above an input or tile group) */
+.quote-field { margin-bottom: 28px; }
+.quote-field-label {
+  display: block;
+  font-size: 14px;
+  color: var(--coastal-mist);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+/* Tile grid — used for compact multi-option selectors like property type or bedrooms */
+.quote-tiles {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.quote-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+  padding: 16px 12px;
+  text-align: center;
+  border: 1px solid var(--stone);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  cursor: pointer;
+  position: relative;
+  transition:
+    border-color var(--dur-fast) var(--ease-default),
+    background var(--dur-fast) var(--ease-default),
+    box-shadow var(--dur-fast) var(--ease-default);
+}
+.quote-tile:hover { border-color: var(--coastal-mist); }
+.quote-tile input[type="radio"] {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+.quote-tile .tile-label {
+  font-size: 15px;
+  color: var(--slate-blue);
+  font-weight: 500;
+  line-height: 1.25;
+}
+.quote-tile:has(input:checked) {
+  border-color: var(--slate-blue);
+  background: rgba(46,71,86,0.04);
+  box-shadow: 0 0 0 1px var(--slate-blue);
+}
+.quote-tile:focus-within {
+  border-color: var(--slate-blue);
+  box-shadow: 0 0 0 3px rgba(46,71,86,0.12);
+}
+
+@media (max-width: 600px) {
+  .quote-tiles { grid-template-columns: repeat(2, 1fr); }
+  .quote-tile { min-height: 64px; }
+}
+
 /* Auxiliary link below option groups (e.g. "Check or order an EPC at gov.uk →") */
 .quote-aux-link {
   display: inline-block;
